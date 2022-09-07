@@ -1,34 +1,33 @@
-import { useState } from "react";
-
+import useInput from "../hooks/use-input";
 const SimpleInput = () => {
-  const [enteredName, setEnteredName] = useState("");
-  const [inputNameIsTouched, setinputNameIsTouched] = useState(false);
+  const {
+    enterdedValue: enteredName,
+    inputIsTouched: inputNameIsTouched,
+    enterdedValueIsValid: enterdNameIsValid,
+    inputValueChangeHandler: inputNameChangeHandler,
+    inputBlurHandler: inputNameBlurHandler,
+    reset: nameReset,
+  } = useInput((value) => value.trim() !== "");
 
-  const [enterdedEmail, setEnteredEmail] = useState("");
-  const [inputEmailIsTouched, setInputEmailIsTouched] = useState(false);
-
-  const enterdNameIsValid = enteredName.trim() !== "";
-  const enterdedEmailIsValid = enterdedEmail.trim().includes("@");
+  const {
+    enterdedValue: enterdedEmail,
+    inputIsTouched: inputEmailIsTouched,
+    enterdedValueIsValid: enterdedEmailIsValid,
+    inputValueChangeHandler: inputEmailChangeHandler,
+    inputBlurHandler: inputEmailBlurHandler,
+    reset: emailReset,
+  } = useInput((value) => value.trim().includes("@"));
 
   const formIsValid = enterdNameIsValid && enterdedEmailIsValid;
 
-  const inputNameChangeHandler = (e) => setEnteredName(e.target.value);
-  const inputEmailChangeHandler = (e) => setEnteredEmail(e.target.value);
-
-  const inputNameBlurHandler = () => setinputNameIsTouched(true);
-  const inputEmailBlurHandler = () => setInputEmailIsTouched(true);
-
   const formSubmissionHandler = (e) => {
     e.preventDefault();
-    setinputNameIsTouched(true);
-    setInputEmailIsTouched(true);
     if (!enterdNameIsValid || !enterdedEmailIsValid) return;
     console.log(enteredName, enterdedEmail);
-    setEnteredName("");
-    setEnteredEmail("");
-    setinputNameIsTouched(false);
-    setInputEmailIsTouched(false);
+    nameReset();
+    emailReset();
   };
+
   return (
     <form onSubmit={formSubmissionHandler}>
       <div
